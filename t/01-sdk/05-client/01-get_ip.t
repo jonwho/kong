@@ -22,7 +22,7 @@ __DATA__
         set_real_ip_from unix:;
 
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("ip: ", sdk.client.get_ip())
@@ -57,7 +57,7 @@ qq{
 
 
             content_by_lua_block {
-                local SDK = require "kong.sdk"
+                local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
                 local sdk = SDK.new()
 
                 ngx.say("ip: ", sdk.client.get_ip())

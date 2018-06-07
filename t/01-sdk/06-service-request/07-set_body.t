@@ -16,7 +16,7 @@ __DATA__
 --- config
     location = /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local pok, err = pcall(sdk.service.request.set_body, 127001)
@@ -37,7 +37,7 @@ args must be a table
 --- config
     location = /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local pok, err = pcall(sdk.service.request.set_body)
@@ -58,7 +58,7 @@ args must be a table
 --- config
     location = /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local pok, err = pcall(sdk.service.request.set_body, {}, 123)
@@ -80,7 +80,7 @@ mime must be a string
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.service.request.set_header("Content-Type", "application/x-www-form-urlencoded")
@@ -109,7 +109,7 @@ attempt to use function as query arg value
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.service.request.set_header("Content-Type", "application/x-www-form-urlencoded")
@@ -152,7 +152,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.service.request.set_body({}, "application/x-www-form-urlencoded")
@@ -192,7 +192,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.service.request.set_header("Content-Type", "application/x-www-form-urlencoded")
@@ -237,7 +237,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             assert(sdk.service.request.set_body({
@@ -283,7 +283,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             assert(sdk.service.request.set_body({
@@ -327,7 +327,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             assert(sdk.service.request.set_body({
@@ -374,7 +374,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             assert(sdk.service.request.set_body({
@@ -421,7 +421,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             assert(sdk.service.request.set_body({
@@ -465,7 +465,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             assert(sdk.service.request.set_body({
@@ -509,7 +509,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             assert(sdk.service.request.set_body({
@@ -554,7 +554,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             assert(sdk.service.request.set_body({
@@ -582,7 +582,7 @@ content-type: {application/x-www-form-urlencoded}
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.service.request.set_header("Content-Type", "application/json")
@@ -611,7 +611,7 @@ Cannot serialise function: type not supported
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.service.request.set_header("Content-Type", "application/json")
@@ -654,7 +654,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             assert(sdk.service.request.set_body({}, "application/json"))
@@ -694,7 +694,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.service.request.set_header("Content-Type", "application/json")
@@ -739,7 +739,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             assert(sdk.service.request.set_body({
@@ -785,7 +785,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             assert(sdk.service.request.set_body({
@@ -832,7 +832,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             assert(sdk.service.request.set_body({
@@ -879,7 +879,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             assert(sdk.service.request.set_body({
@@ -923,7 +923,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             assert(sdk.service.request.set_body({
@@ -950,7 +950,7 @@ content-type: {application/json}
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local ok, err = pcall(sdk.service.request.set_body, {
@@ -1002,7 +1002,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             assert(sdk.service.request.set_body({
@@ -1056,7 +1056,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             assert(sdk.service.request.set_body({

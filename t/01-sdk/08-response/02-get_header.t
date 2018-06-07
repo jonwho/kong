@@ -25,7 +25,7 @@ __DATA__
         header_filter_by_lua_block {
             ngx.header.content_length = nil
 
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.ctx.data = "content type header value: " .. sdk.response.get_header("Accept")
@@ -56,7 +56,7 @@ content type header value: application/json
         header_filter_by_lua_block {
             ngx.header.content_length = nil
 
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local data = {}
@@ -96,7 +96,7 @@ x_Foo_header: Hello
         header_filter_by_lua_block {
             ngx.header.content_length = nil
 
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.ctx.data = "X-Missing: " .. type(sdk.response.get_header("X-Missing"))
@@ -131,7 +131,7 @@ X-Missing: nil
         header_filter_by_lua_block {
             ngx.header.content_length = nil
 
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.ctx.data = "accept header value: " .. type(sdk.response.get_header("Accept"))
@@ -161,7 +161,7 @@ accept header value: nil
         header_filter_by_lua_block {
             ngx.header.content_length = nil
 
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local ok, err = pcall(sdk.response.get_header)
@@ -212,7 +212,7 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local get_header = sdk.response.get_header

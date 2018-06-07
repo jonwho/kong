@@ -21,7 +21,7 @@ __DATA__
         header_filter_by_lua_block {
             ngx.header.content_length = nil
 
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.ctx.type = "type: " .. type(sdk.response.get_status())
@@ -63,7 +63,7 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.arg[1] = "status: " .. sdk.response.get_status()
@@ -101,7 +101,7 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.arg[1] = "status: " .. sdk.response.get_status()
@@ -136,14 +136,14 @@ qq{
 --- config
     location /t {
         rewrite_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.status = 201
         }
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.status = 202
@@ -154,7 +154,7 @@ qq{
         header_filter_by_lua_block {
             ngx.header.content_length = nil
 
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             assert(sdk.response.get_status() == 203, "203 ~=" .. tostring(sdk.response.get_status()))
@@ -163,14 +163,14 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             assert(sdk.response.get_status() == 204, "204 ~=" .. tostring(sdk.response.get_status()))
         }
 
         log_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             assert(sdk.response.get_status() == 204, "204 ~=" .. tostring(sdk.response.get_status()))

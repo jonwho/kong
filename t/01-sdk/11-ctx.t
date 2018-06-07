@@ -18,7 +18,7 @@ __DATA__
 --- config
     location = /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.ctx.shared.hello = "world"
@@ -50,7 +50,7 @@ nil
 --- config
     location = /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk1 = SDK.new()
             local sdk2 = SDK.new()
 

@@ -21,7 +21,7 @@ __DATA__
         header_filter_by_lua_block {
             ngx.header.content_length = nil
 
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local ok, err = pcall(sdk.response.set_status)
@@ -54,7 +54,7 @@ error: code must be a number
         header_filter_by_lua_block {
             ngx.header.content_length = nil
 
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local ok1, err1 = pcall(sdk.response.set_status, 99)
@@ -105,7 +105,7 @@ qq{
             }
 
             header_filter_by_lua_block {
-                local SDK = require "kong.sdk"
+                local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
                 local sdk = SDK.new()
 
                 sdk.response.set_status(204)
@@ -149,7 +149,7 @@ qq{
             }
 
             header_filter_by_lua_block {
-                local SDK = require "kong.sdk"
+                local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
                 local sdk = SDK.new()
 
                 sdk.response.set_status(204)
@@ -162,7 +162,7 @@ qq{
         proxy_pass http://unix:$TEST_NGINX_HTML_DIR/nginx.sock;
 
         header_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.response.set_status(200)

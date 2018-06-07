@@ -38,7 +38,7 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.arg[1] = "content type header value: " .. sdk.service.response.get_header("Accept")
@@ -78,7 +78,7 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.arg[1] = "X-Foo-Header: " .. sdk.service.response.get_header("X-Foo-Header") .. "\n" ..
@@ -123,7 +123,7 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.arg[1] = "X-Missing: " .. type(sdk.service.response.get_header("X-Missing"))
@@ -167,7 +167,7 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.arg[1] = "accept header value: " .. type(sdk.service.response.get_header("Accept"))
@@ -205,7 +205,7 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local _, err = pcall(sdk.service.response.get_header)
@@ -251,7 +251,7 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local get_header = sdk.service.response.get_header
@@ -292,7 +292,7 @@ qq{
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.response.set_header("X-Non-Service-Header", "test")
@@ -305,7 +305,7 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local get_header = sdk.service.response.get_header

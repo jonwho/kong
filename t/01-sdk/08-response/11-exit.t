@@ -16,7 +16,7 @@ __DATA__
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local ok, err = pcall(sdk.response.exit)
@@ -40,7 +40,7 @@ code must be a number
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local ok1, err1 = pcall(sdk.response.exit, 99)
@@ -72,7 +72,7 @@ code must be a number between 100 and 599
     location = /t {
         access_by_lua_block {
             local ffi = require "ffi"
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local ok1, err1 = pcall(sdk.response.exit, 200, pcall)
@@ -115,7 +115,7 @@ body must be a nil, string or table
         access_by_lua_block {
             ngx.send_headers()
 
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local ok, err = pcall(sdk.response.exit, 200)
@@ -141,7 +141,7 @@ headers have already been sent
         access_by_lua_block {
             ngx.ctx.delay_response = true
 
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.response.exit(500, "ok")
@@ -170,7 +170,7 @@ headers have already been sent
 --- config
     location = /t {
         rewrite_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.response.exit(200)
@@ -218,7 +218,7 @@ true
     location = /t {
         default_type '';
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.response.exit(456)
@@ -242,7 +242,7 @@ GET /t
         access_by_lua_block {
             ngx.ctx.delay_response = true
 
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.response.exit(456)
@@ -269,7 +269,7 @@ Server: kong/\d+\.\d+\.\d+
     location = /t {
         default_type '';
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.response.exit(ngx.HTTP_NO_CONTENT)
@@ -292,7 +292,7 @@ Server: kong/\d+\.\d+\.\d+
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local pok, err = pcall(sdk.response.exit, 200, nil, 127001)
@@ -314,7 +314,7 @@ headers must be a nil or table
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local pok, err = pcall(sdk.response.exit, 200, nil, {[2] = "foo"})
@@ -337,7 +337,7 @@ invalid header name "2": got number, expected string
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local pok, err = pcall(sdk.response.exit, 200, nil, {["foo"] = function() end})
@@ -359,7 +359,7 @@ invalid header value for "foo": got function, expected string, number, boolean o
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local pok, err = pcall(sdk.response.exit, 200, nil, {["foo"] = { function() end }})
@@ -382,7 +382,7 @@ invalid header value in array "foo": got function, expected string
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.response.exit(200, "hello", { ["Content-Type"] = "text/plain" })
@@ -407,7 +407,7 @@ hello
     location = /t {
         default_type 'text/test';
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.response.exit(200, "hello")
@@ -432,7 +432,7 @@ hello
     location = /t {
         default_type 'text/test';
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.response.exit(200, { message = "hello" })
@@ -457,7 +457,7 @@ Content-Type: application/json; charset=utf-8
     location = /t {
         default_type 'text/test';
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.response.exit(200, { message = "hello" }, {
@@ -484,7 +484,7 @@ Content-Type: application/json; charset=utf-8
     location = /t {
         default_type 'text/test';
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.response.exit(200, "", {
@@ -512,7 +512,7 @@ Content-Length: 0
     location = /t {
         default_type 'text/test';
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.response.exit(200, nil, {
@@ -541,7 +541,7 @@ Content-Length: 0
     location = /t {
         default_type 'text/test';
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.response.exit(200, "a", {
@@ -570,7 +570,7 @@ a
     location = /t {
         default_type 'text/test';
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.response.exit(200, { message = "hello" }, {

@@ -21,7 +21,7 @@ __DATA__
         header_filter_by_lua_block {
             ngx.header.content_length = nil
 
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local ok, err = pcall(sdk.response.set_headers)
@@ -54,7 +54,7 @@ headers must be a table
         header_filter_by_lua_block {
             ngx.header.content_length = nil
 
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local ok, err = pcall(sdk.response.set_headers, 127001)
@@ -90,7 +90,7 @@ qq{
             }
 
             header_filter_by_lua_block {
-                local SDK = require "kong.sdk"
+                local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
                 local sdk = SDK.new()
 
                 sdk.response.set_headers({["X-Foo"] = "hello world"})
@@ -142,7 +142,7 @@ qq{
         header_filter_by_lua_block {
             ngx.header.content_length = nil
 
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.response.set_headers({["X-Foo"] = "hello world"})
@@ -175,7 +175,7 @@ qq{
             }
 
             header_filter_by_lua_block {
-                local SDK = require "kong.sdk"
+                local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
                 local sdk = SDK.new()
 
                 sdk.response.set_headers({["X-Foo"] = ""})
@@ -218,7 +218,7 @@ qq{
             }
 
             header_filter_by_lua_block {
-                local SDK = require "kong.sdk"
+                local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
                 local sdk = SDK.new()
 
                 sdk.response.set_headers({["X-Foo"] = "     hello"})
@@ -261,7 +261,7 @@ qq{
             }
 
             header_filter_by_lua_block {
-                local SDK = require "kong.sdk"
+                local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
                 local sdk = SDK.new()
 
                 sdk.response.set_headers({["X-Foo"] = "hello     "})
@@ -304,7 +304,7 @@ qq{
             }
 
             header_filter_by_lua_block {
-                local SDK = require "kong.sdk"
+                local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
                 local sdk = SDK.new()
 
                 sdk.response.set_headers({["X-Foo"] = ""})
@@ -347,7 +347,7 @@ X-Bar: {nil}
         header_filter_by_lua_block {
             ngx.header.content_length = nil
 
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
             local ok, err = pcall(sdk.response.set_headers, {[2] = "foo"})
             if not ok then
@@ -379,7 +379,7 @@ invalid header name "2": got number, expected string
         header_filter_by_lua_block {
             ngx.header.content_length = nil
 
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local ok, err = pcall(sdk.response.set_headers, {["foo"] = function() end})
@@ -412,7 +412,7 @@ invalid header value for "foo": got function, expected string, number, boolean o
         header_filter_by_lua_block {
             ngx.header.content_length = nil
 
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local ok, err = pcall(sdk.response.set_headers, {["foo"] = {{}}})
@@ -445,7 +445,7 @@ invalid header value in array "foo": got table, expected string
         header_filter_by_lua_block {
             ngx.header.content_length = nil
 
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local ok, err = pcall(sdk.response.set_headers, {["foo"] = {123}})
@@ -481,7 +481,7 @@ qq{
             }
 
             header_filter_by_lua_block {
-                local SDK = require "kong.sdk"
+                local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
                 local sdk = SDK.new()
 
                 sdk.response.set_headers({
@@ -546,7 +546,7 @@ qq{
         header_filter_by_lua_block {
             ngx.header.content_length = nil
 
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.response.set_headers({
@@ -599,7 +599,7 @@ qq{
         header_filter_by_lua_block {
             ngx.header.content_length = nil
 
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.response.set_headers({
@@ -639,7 +639,7 @@ X-Foo: {zzz}
         header_filter_by_lua_block {
             ngx.header.content_length = nil
 
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local ok, err sdk.response.set_headers({})
@@ -673,7 +673,7 @@ ok
         header_filter_by_lua_block {
             ngx.header.content_length = nil
 
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local ok, err = pcall(sdk.response.set_headers, { ["Content-Type"] = "text/plain" })

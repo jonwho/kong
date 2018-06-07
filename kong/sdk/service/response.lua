@@ -1,6 +1,7 @@
 local checks = require "kong.sdk.private.checks"
 
 
+local bit = bit
 local ngx = ngx
 local sub = string.sub
 local fmt = string.format
@@ -12,6 +13,9 @@ local tonumber = tonumber
 local getmetatable = getmetatable
 local check_phase = checks.check_phase
 local ALL_PHASES = checks.phases.ALL_PHASES
+local RESPONSE_PHASES = bit.bor(checks.phases.HEADER_FILTER,
+                                checks.phases.BODY_FILTER,
+                                checks.phases.LOG)
 
 
 local function headers(response_headers)
@@ -42,14 +46,14 @@ local function new(sdk, major_version)
 
 
   function response.get_status()
-    check_phase(ALL_PHASES)
+    check_phase(RESPONSE_PHASES)
 
     return tonumber(sub(ngx.var.upstream_status or "", -3))
   end
 
 
   function response.get_headers(max_headers)
-    check_phase(ALL_PHASES)
+    check_phase(RESPONSE_PHASES)
 
     if max_headers == nil then
       return headers(ngx.resp.get_headers(MAX_HEADERS_DEFAULT))
@@ -70,7 +74,7 @@ local function new(sdk, major_version)
 
 
   function response.get_header(name)
-    check_phase(ALL_PHASES)
+    check_phase(RESPONSE_PHASES)
 
     if type(name) ~= "string" then
       error("name must be a string", 2)

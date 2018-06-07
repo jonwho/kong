@@ -17,7 +17,7 @@ __DATA__
         }
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("version: ", sdk.request.get_http_version())
@@ -37,7 +37,7 @@ version: 1
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("version: ", sdk.request.get_http_version())
@@ -57,7 +57,7 @@ version: 1.1
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("type: ", type(sdk.request.get_http_version()))

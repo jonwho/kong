@@ -16,7 +16,7 @@ __DATA__
 --- config
     location = /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local pok, err = pcall(sdk.service.request.set_raw_query, 127001)
@@ -37,7 +37,7 @@ query must be a string
 --- config
     location = /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local pok, err = pcall(sdk.service.request.set_raw_query)
@@ -75,7 +75,7 @@ qq{
         set $upstream_host '';
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.service.request.set_raw_query("")
@@ -115,7 +115,7 @@ qq{
         set $upstream_host '';
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.service.request.set_raw_query("foo=bar&bla&baz=hello%20world")
@@ -155,7 +155,7 @@ qq{
         set $upstream_host '';
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.service.request.set_raw_query("foo=bar&bla&baz=hello%20world")

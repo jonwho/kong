@@ -33,7 +33,7 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.arg[1] = "type: " .. type(sdk.service.response.get_status())
@@ -71,7 +71,7 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.arg[1] = "status: " .. sdk.service.response.get_status()
@@ -109,7 +109,7 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.arg[1] = "status: " .. sdk.service.response.get_status()
@@ -149,7 +149,7 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.arg[1] = "service response status: " .. sdk.service.response.get_status() .. "\n" ..

@@ -16,7 +16,7 @@ __DATA__
 --- config
     location = /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local pok, err = pcall(sdk.service.request.set_headers)
@@ -37,7 +37,7 @@ headers must be a table
 --- config
     location = /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local pok, err = pcall(sdk.service.request.set_headers, 127001)
@@ -74,7 +74,7 @@ qq{
         set $upstream_host '';
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.ctx.balancer_address = {
@@ -116,7 +116,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.service.request.set_headers({["X-Foo"] = "hello world"})
@@ -153,7 +153,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.service.request.set_headers({["X-Foo"] = "hello world"})
@@ -193,7 +193,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.service.request.set_headers({["X-Foo"] = ""})
@@ -230,7 +230,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.service.request.set_headers({["X-Foo"] = "     hello"})
@@ -267,7 +267,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.service.request.set_headers({["X-Foo"] = "hello       "})
@@ -304,7 +304,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.service.request.set_headers({["X-Foo"] = 2.5})
@@ -341,7 +341,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.service.request.set_headers({["X-Foo"] = false})
@@ -380,7 +380,7 @@ qq{
     location = /t {
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.service.request.set_headers({["X-Foo"] = ""})
@@ -404,7 +404,7 @@ X-Bar: {nil}
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local pok, err = pcall(sdk.service.request.set_headers, {[2] = "foo"})
@@ -426,7 +426,7 @@ invalid header name "2": got number, expected string
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local pok, err = pcall(sdk.service.request.set_headers, {["foo"] = function() end })
@@ -448,7 +448,7 @@ invalid header value for "foo": got function, expected string, number, boolean o
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local pok, err = pcall(sdk.service.request.set_headers, {["foo"] = { {} }})
@@ -486,7 +486,7 @@ qq{
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.service.request.set_headers({
@@ -533,7 +533,7 @@ qq{
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.service.request.set_headers({
@@ -577,7 +577,7 @@ qq{
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.service.request.set_headers({
@@ -610,7 +610,7 @@ X-Foo: {zzz}
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.service.request.set_headers({})

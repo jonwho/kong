@@ -14,7 +14,7 @@ __DATA__
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("type: ", type(sdk.request.get_query()))
@@ -34,7 +34,7 @@ type: table
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local args = sdk.request.get_query()
@@ -59,7 +59,7 @@ Accept: application/json, text/html
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local args = sdk.request.get_query()
@@ -92,7 +92,7 @@ fOO: Too
         }
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local args = sdk.request.get_query()
@@ -128,7 +128,7 @@ number of query arguments fetched: 100
         }
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local headers = sdk.request.get_query(60)
@@ -156,7 +156,7 @@ number of query arguments fetched: 60
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local _, err = pcall(sdk.request.get_query, "invalid")
@@ -178,7 +178,7 @@ error: max_args must be a number
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local _, err = pcall(sdk.request.get_query, 0)
@@ -200,7 +200,7 @@ error: max_args must be >= 1
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local _, err = pcall(sdk.request.get_query, 1001)

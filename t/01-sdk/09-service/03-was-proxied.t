@@ -16,7 +16,7 @@ __DATA__
 --- config
     location = /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.ctx.KONG_PROXIED = true
@@ -38,7 +38,7 @@ true
 --- config
     location = /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local pok, ok = pcall(sdk.service.was_proxied)

@@ -14,7 +14,7 @@ __DATA__
 --- config
     location /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.log.set_format("log from kong.log: %message")
@@ -37,7 +37,7 @@ qr/\[kong\] log from kong\.log: hello world/
 --- config
     location /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.log.set_format("log from kong.log: %message")
@@ -62,7 +62,7 @@ qr/\[error\] .*? log from kong\.log: hello world/
 --- config
     location /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.log.set_format("log from kong.log: %message")
@@ -85,7 +85,7 @@ log from kong.log: hello world
 --- config
     location /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.log.set_format("a useless format")
@@ -108,7 +108,7 @@ hello world
 --- config
     location /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.log.set_format("%message | %message")
@@ -131,7 +131,7 @@ hello world | hello world
 --- config
     location /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.log.set_format("file_src(%file_src) %message")
@@ -152,7 +152,7 @@ qr/file_src\(content_by_lua\(nginx\.conf:\d+\)\) hello world/
 === TEST 7: log.set_format() accepts %file_src modifier (Lua file)
 --- user_files
 >>> my_file.lua
-local SDK = require "kong.sdk"
+local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
 local sdk = SDK.new()
 
 sdk.log.set_format("file_src(%file_src) %message")
@@ -176,7 +176,7 @@ qr/file_src\(my_file\.lua\) hello world/
 === TEST 8: log.set_format() accepts %line_src modifier
 --- user_files
 >>> my_file.lua
-local SDK = require "kong.sdk"
+local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
 local sdk = SDK.new()
 
 sdk.log.set_format("line_src(%line_src) %message")
@@ -204,7 +204,7 @@ qr/line_src\(7\) hello world/
 === TEST 9: log.set_format() accepts %func_name modifier
 --- user_files
 >>> my_file.lua
-local SDK = require "kong.sdk"
+local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
 local sdk = SDK.new()
 
 sdk.log.set_format("func_name(%func_name) %message")
@@ -234,7 +234,7 @@ qr/func_name\(my_func\) hello world/
 --- config
     location /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             sdk.log.set_format("func_name(%func_name) %message")
@@ -257,7 +257,7 @@ qr/func_name\(\?\) hello world/
 --- config
     location /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local log = sdk.log.new("my_namespace")
@@ -282,7 +282,7 @@ log from facility: hello world
 --- config
     location /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local log = sdk.log.new("my_namespace")
@@ -307,7 +307,7 @@ GET /t
 --- config
     location /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local log = sdk.log.new("my_namespace")
@@ -332,7 +332,7 @@ GET /t
 --- config
     location /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local log = sdk.log.new("my_namespace")

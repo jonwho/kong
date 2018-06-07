@@ -33,7 +33,7 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.arg[1] = "type: " .. type(sdk.service.response.get_headers())
@@ -78,7 +78,7 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local headers = sdk.service.response.get_headers()
@@ -126,7 +126,7 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local headers = sdk.service.response.get_headers()
@@ -179,7 +179,7 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local headers = sdk.service.response.get_headers()
@@ -233,7 +233,7 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local headers = sdk.service.response.get_headers(60)
@@ -281,7 +281,7 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local _, err = pcall(sdk.service.response.get_headers, "invalid")
@@ -321,7 +321,7 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local _, err = pcall(sdk.service.response.get_headers, 0)
@@ -361,7 +361,7 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local _, err = pcall(sdk.service.response.get_headers, 1001)
@@ -407,7 +407,7 @@ qq{
         }
 
         body_filter_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local headers = sdk.service.response.get_headers()

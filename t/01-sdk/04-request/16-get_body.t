@@ -14,7 +14,7 @@ __DATA__
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local args, err, mime = sdk.request.get_body()
@@ -43,7 +43,7 @@ mime=application/x-www-form-urlencoded
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local args, err, mime = sdk.request.get_body()
@@ -74,7 +74,7 @@ mime=application/json
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local args, err, mime = sdk.request.get_body()
@@ -107,7 +107,7 @@ mime=multipart/form-data
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local _, err = sdk.request.get_body()
@@ -130,7 +130,7 @@ error: missing content type
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local _, err = sdk.request.get_body()
@@ -155,7 +155,7 @@ error: unsupported content type 'application/x-unsupported'
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local _, err = sdk.request.get_body()
@@ -179,7 +179,7 @@ error: invalid json body
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local args, err, mime = sdk.request.get_body()
@@ -208,7 +208,7 @@ mime=application/x-www-form-urlencoded
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local args = sdk.request.get_body()
@@ -236,7 +236,7 @@ Accept: application/json, text/html
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("next: ", next(sdk.request.get_body()))
@@ -260,7 +260,7 @@ next: nil
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local args = sdk.request.get_body()
@@ -297,7 +297,7 @@ fOO: Too
         }
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local args = sdk.request.get_body("application/x-www-form-urlencoded")
@@ -334,7 +334,7 @@ number of query arguments fetched: 100
         }
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local headers = sdk.request.get_body("application/x-www-form-urlencoded", 60)
@@ -362,7 +362,7 @@ number of query arguments fetched: 60
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local _, err = pcall(sdk.request.get_body, "application/x-www-form-urlencoded", "invalid")
@@ -384,7 +384,7 @@ error: max_args must be a number
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local _, err = pcall(sdk.request.get_body, "application/x-www-form-urlencoded", 0)
@@ -406,7 +406,7 @@ error: max_args must be >= 1
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local _, err = pcall(sdk.request.get_body, "application/x-www-form-urlencoded", 1001)
@@ -428,7 +428,7 @@ error: max_args must be <= 1000
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local args, err = sdk.request.get_body()

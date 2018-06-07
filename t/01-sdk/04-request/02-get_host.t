@@ -18,7 +18,7 @@ __DATA__
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("host: ", sdk.request.get_host())
@@ -48,7 +48,7 @@ qq{
             }
 
             access_by_lua_block {
-                local SDK = require "kong.sdk"
+                local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
                 local sdk = SDK.new()
 
                 ngx.say("host: ", sdk.request.get_host())
@@ -84,7 +84,7 @@ qq{
             }
 
             access_by_lua_block {
-                local SDK = require "kong.sdk"
+                local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
                 local sdk = SDK.new()
 
                 ngx.say("host: ", sdk.request.get_host())
@@ -111,7 +111,7 @@ host: kong
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("host: ", sdk.request.get_host())
@@ -131,7 +131,7 @@ host: test
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("host: ", sdk.request.get_host())
@@ -153,7 +153,7 @@ host: kong
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("host: ", sdk.request.get_host())
@@ -175,7 +175,7 @@ host: test
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("host: ", sdk.request.get_host())
@@ -197,7 +197,7 @@ host: test
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("host: ", sdk.request.get_host())
@@ -228,7 +228,7 @@ qq{
             }
 
             access_by_lua_block {
-                local SDK = require "kong.sdk"
+                local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
                 local sdk = SDK.new()
 
                 ngx.say("host: ", sdk.request.get_host())

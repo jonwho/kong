@@ -14,7 +14,7 @@ __DATA__
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("accept header value: ", sdk.request.get_header("Accept"))
@@ -37,7 +37,7 @@ accept header value: application/json
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("X-Foo-Header: ", sdk.request.get_header("X-Foo-Header"))
@@ -65,7 +65,7 @@ x_Foo_header: Hello
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("X-Missing: ", sdk.request.get_header("X-Missing"))
@@ -87,7 +87,7 @@ X-Missing: nil
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("X-Foo-Header: '", sdk.request.get_header("X-Foo-Header"), "'")
@@ -109,7 +109,7 @@ X-Foo-Header: ''
 --- config
     location = /t {
         rewrite_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             for name in pairs(sdk.request.get_headers()) do
@@ -124,7 +124,7 @@ X-Foo-Header: ''
         }
 
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("accept header value: ", sdk.request.get_header("Accept"))
@@ -144,7 +144,7 @@ accept header value: nil
 --- config
     location = /t {
         access_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local _, err = pcall(sdk.request.get_header)

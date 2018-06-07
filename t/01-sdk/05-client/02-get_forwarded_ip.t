@@ -22,7 +22,7 @@ __DATA__
         set_real_ip_from unix:;
 
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("ip: ", sdk.client.get_forwarded_ip())
@@ -50,7 +50,7 @@ ip: 10.0.0.1
         set_real_ip_from unix:;
 
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("ip: ", sdk.client.get_forwarded_ip())
@@ -78,7 +78,7 @@ ip: 10.0.0.1
         set_real_ip_from unix:;
 
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("ip: ", sdk.client.get_forwarded_ip())
@@ -112,7 +112,7 @@ qq{
             set_real_ip_from unix:;
 
             content_by_lua_block {
-                local SDK = require "kong.sdk"
+                local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
                 local sdk = SDK.new()
 
                 ngx.say("ip: ", sdk.client.get_forwarded_ip())
@@ -152,7 +152,7 @@ ip: 10.0.0.1
         real_ip_header X-Real-IP;
 
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("ip: ", sdk.client.get_forwarded_ip())
@@ -176,7 +176,7 @@ ip: 127.0.0.1
         real_ip_header X-Forwarded-For;
 
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("ip: ", sdk.client.get_forwarded_ip())
@@ -200,7 +200,7 @@ ip: 127.0.0.1
         real_ip_header X-Forwarded-For;
 
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("ip: ", sdk.client.get_forwarded_ip())
@@ -230,7 +230,7 @@ qq{
             real_ip_header proxy_protocol;
 
             content_by_lua_block {
-                local SDK = require "kong.sdk"
+                local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
                 local sdk = SDK.new()
 
                 ngx.say("ip: ", sdk.client.get_forwarded_ip())

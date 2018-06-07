@@ -14,7 +14,7 @@ __DATA__
 --- config
     location /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local ok, err = pcall(sdk.log.new)
@@ -37,7 +37,7 @@ namespace must be a string
 --- config
     location /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local ok, err = pcall(sdk.log.new, "")
@@ -60,7 +60,7 @@ namespace cannot be an empty string
 --- config
     location /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local ok, err = pcall(sdk.log.new, "my_namespace", "")
@@ -83,7 +83,7 @@ format cannot be an empty string if specified
 --- config
     location /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local log = sdk.log.new("my_namespace")
@@ -106,7 +106,7 @@ qr/\[kong\] content_by_lua\(nginx\.conf:\d+\):\d+ \[my_namespace\] hello world/
 --- config
     location /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             local log = sdk.log.new("my_namespace", "%message")

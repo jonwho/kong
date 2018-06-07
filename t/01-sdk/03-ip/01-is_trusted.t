@@ -14,7 +14,7 @@ __DATA__
 --- config
     location = /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
 
             local kong_conf = {
                 trusted_ips = { "127.0.0.1", "0.0.0.0/0" }
@@ -58,7 +58,7 @@ ok
 --- config
     location = /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
 
             local kong_conf = {
                 trusted_ips = { "::1", "::/0" }
@@ -101,7 +101,7 @@ ok
 --- config
     location = /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
 
             local kong_conf = {
                 trusted_ips = {}
@@ -145,7 +145,7 @@ ok
 --- config
     location = /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
 
             local kong_conf = {
                 trusted_ips = {}

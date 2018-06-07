@@ -2,6 +2,7 @@ local cjson = require "cjson.safe"
 local checks = require "kong.sdk.private.checks"
 
 
+local bit = bit
 local ngx = ngx
 local table_insert = table.insert
 local table_sort = table.sort
@@ -14,7 +15,8 @@ local normalize_multi_header = checks.normalize_multi_header
 local validate_header = checks.validate_header
 local validate_headers = checks.validate_headers
 local check_phase = checks.check_phase
-local ALL_PHASES = checks.phases.ALL_PHASES
+local REQUEST_PHASES = bit.bor(checks.phases.ACCESS,
+                               checks.phases.REWRITE)
 
 --------------------------------------------------------------------------------
 -- Produce a lexicographically ordered querystring, given a table of values.
@@ -66,7 +68,7 @@ local function new(self)
   -- @param scheme Protocol to use. Supported values are `"http"` and `"https"`.
   -- @return Nothing; throws an error on invalid inputs.
   request.set_scheme = function(scheme)
-    check_phase(ALL_PHASES)
+    check_phase(REQUEST_PHASES)
 
     if type(scheme) ~= "string" then
       error("scheme must be a string", 2)
@@ -87,7 +89,7 @@ local function new(self)
   -- @param path The path string. Example: "/v2/movies"
   -- @return Nothing; throws an error on invalid inputs.
   request.set_path = function(path)
-    check_phase(ALL_PHASES)
+    check_phase(REQUEST_PHASES)
 
     if type(path) ~= "string" then
       error("path must be a string", 2)
@@ -113,7 +115,7 @@ local function new(self)
   -- @param query The raw querystring. Example: "foo=bar&bla&baz=hello%20world"
   -- @return Nothing; throws an error on invalid inputs.
   request.set_raw_query = function(query)
-    check_phase(ALL_PHASES)
+    check_phase(REQUEST_PHASES)
 
     if type(query) ~= "string" then
       error("query must be a string", 2)
@@ -153,7 +155,7 @@ local function new(self)
     -- `"PROPPATCH"`, `"LOCK"`, `"UNLOCK"`, `"PATCH"`, `"TRACE"`.
     -- @return Nothing; throws an error on invalid inputs.
     request.set_method = function(method)
-      check_phase(ALL_PHASES)
+      check_phase(REQUEST_PHASES)
 
       if type(method) ~= "string" then
         error("method must be a string", 2)
@@ -184,7 +186,7 @@ local function new(self)
   -- strings or booleans. Any string values given are URL-encoded.
   -- @return Nothing; throws an error on invalid inputs.
   request.set_query = function(args)
-    check_phase(ALL_PHASES)
+    check_phase(REQUEST_PHASES)
 
     if type(args) ~= "table" then
       error("args must be a table", 2)
@@ -207,7 +209,7 @@ local function new(self)
   -- @param value The header value. Example: "hello world"
   -- @return Nothing; throws an error on invalid inputs.
   request.set_header = function(header, value)
-    check_phase(ALL_PHASES)
+    check_phase(REQUEST_PHASES)
 
     validate_header(header, value)
 
@@ -228,7 +230,7 @@ local function new(self)
   -- @param value The header value. Example: "no-cache"
   -- @return Nothing; throws an error on invalid inputs.
   request.add_header = function(header, value)
-    check_phase(ALL_PHASES)
+    check_phase(REQUEST_PHASES)
 
     validate_header(header, value)
 
@@ -254,7 +256,7 @@ local function new(self)
   -- @return Nothing; throws an error on invalid inputs.
   -- The function does not throw an error if no header was removed.
   request.clear_header = function(header)
-    check_phase(ALL_PHASES)
+    check_phase(REQUEST_PHASES)
 
     if type(header) ~= "string" then
       error("header must be a string", 2)
@@ -282,7 +284,7 @@ local function new(self)
   -- and each value is either a string or an array of strings.
   -- @return Nothing; throws an error on invalid inputs.
   request.set_headers = function(headers)
-    check_phase(ALL_PHASES)
+    check_phase(REQUEST_PHASES)
 
     if type(headers) ~= "table" then
       error("headers must be a table", 2)
@@ -316,7 +318,7 @@ local function new(self)
   -- @param body The raw body, as a string.
   -- @return Nothing; throws an error on invalid inputs.
   request.set_raw_body = function(body)
-    check_phase(ALL_PHASES)
+    check_phase(REQUEST_PHASES)
 
     if type(body) ~= "string" then
       error("body must be a string", 2)
@@ -470,9 +472,10 @@ local function new(self)
     -- @param mime if given, it should be in the same format as the
     -- value returned by `kong.service.request.get_body`.
     -- The `Content-Type` header will be updated to match the appropriate type.
-    -- @return Nothing; throws an error on invalid inputs.
+    -- @return true on success; nil and an error message in case of errors;
+    -- throws an error on invalid inputs.
     request.set_body = function(args, mime)
-      check_phase(ALL_PHASES)
+      check_phase(REQUEST_PHASES)
 
       if type(args) ~= "table" then
         error("args must be a table", 2)
@@ -480,8 +483,13 @@ local function new(self)
       if mime and type(mime) ~= "string" then
         error("mime must be a string", 2)
       end
-      if not mime then
+      local mime_given = mime ~= nil
+      if not mime_given then
         mime = ngx.req.get_headers()[CONTENT_TYPE]
+        if not mime then
+          return nil, "cannot detect format: no mimetype argument given " ..
+                      "and no Content-Type header present"
+        end
       end
 
       local boundaryless_mime = mime
@@ -492,7 +500,11 @@ local function new(self)
 
       local handler_fn = set_body_handlers[boundaryless_mime]
       if not handler_fn then
-        error("unsupported content type " .. mime, 2)
+        if mime_given then
+          error("unsupported content type " .. mime, 2)
+        else
+          return nil, "unsupported value in Content-Type header: " .. mime
+        end
       end
 
       -- Ensure client request body has been read.

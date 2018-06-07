@@ -16,7 +16,7 @@ __DATA__
 --- config
     location = /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
             --sdk.init(nil, "ip")
 
@@ -37,7 +37,7 @@ port: \d+
 --- config
     location = /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
             --sdk.init(nil, "ip")
 
@@ -64,7 +64,7 @@ port type: number
         set_real_ip_from unix:;
 
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("port: ", sdk.client.get_forwarded_port())
@@ -92,7 +92,7 @@ port: 1234
         set_real_ip_from unix:;
 
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("port: ", sdk.client.get_forwarded_port())
@@ -120,7 +120,7 @@ port: nil
         set_real_ip_from unix:;
 
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("port: ", sdk.client.get_forwarded_port())
@@ -148,7 +148,7 @@ port: 1234
         set_real_ip_from unix:;
 
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("port: ", sdk.client.get_forwarded_port())
@@ -182,7 +182,7 @@ qq{
             set_real_ip_from unix:;
 
             content_by_lua_block {
-                local SDK = require "kong.sdk"
+                local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
                 local sdk = SDK.new()
 
                 ngx.say("port: ", sdk.client.get_forwarded_port())
@@ -222,7 +222,7 @@ port: 1234
         real_ip_header X-Real-IP;
 
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("port: ", sdk.client.get_forwarded_port())
@@ -246,7 +246,7 @@ port: \d+
         real_ip_header X-Forwarded-For;
 
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("port: ", sdk.client.get_forwarded_port())
@@ -270,7 +270,7 @@ port: \d+
         real_ip_header X-Forwarded-For;
 
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("port: ", sdk.client.get_forwarded_port())
@@ -296,7 +296,7 @@ port: \d+
         real_ip_header X-Forwarded-For;
 
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
             local sdk = SDK.new()
 
             ngx.say("port: ", sdk.client.get_forwarded_port())
@@ -328,7 +328,7 @@ qq{
             real_ip_header proxy_protocol;
 
             content_by_lua_block {
-                local SDK = require "kong.sdk"
+                local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
                 local sdk = SDK.new()
 
                 ngx.say("port: ", sdk.client.get_forwarded_port())

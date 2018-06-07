@@ -16,7 +16,7 @@ __DATA__
 --- config
     location = /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
 
             ngx.say("major_versions: ", type(SDK.major_versions))
             ngx.say("instantiating sdk")
@@ -44,7 +44,7 @@ is latest: true
 --- config
     location = /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
 
             local sdk = SDK.new()
 
@@ -68,7 +68,7 @@ sdk_version: \d+\.\d+.\d+
 --- config
     location = /t {
         content_by_lua_block {
-            local SDK = require "kong.sdk"
+            local SDK = require "kong.sdk"; ngx.ctx.kong_phase = require("kong.sdk.private.checks").phases.ACCESS
 
             local sdk_latest = SDK.new()
             local sdk_previous = SDK.new(0)
