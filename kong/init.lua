@@ -56,6 +56,7 @@ local DB = require "kong.db"
 local dns = require "kong.tools.dns"
 local utils = require "kong.tools.utils"
 local lapis = require "lapis"
+local checks = require "kong.sdk.private.checks"
 local runloop = require "kong.runloop.handler"
 local responses = require "kong.tools.responses"
 local singletons = require "kong.singletons"
@@ -73,6 +74,7 @@ local ngx_log          = ngx.log
 local ngx_ERR          = ngx.ERR
 local ngx_CRIT         = ngx.CRIT
 local ngx_DEBUG        = ngx.DEBUG
+local phases           = checks.phases
 local ipairs           = ipairs
 local assert           = assert
 local tostring         = tostring
@@ -213,6 +215,8 @@ function Kong.init()
 end
 
 function Kong.init_worker()
+  ngx.ctx.kong_phase = phases.INIT_WORKER
+
   -- special math.randomseed from kong.globalpatches
   -- not taking any argument. Must be called only once
   -- and in the init_worker phase, to avoid duplicated
@@ -329,6 +333,8 @@ end
 
 function Kong.ssl_certificate()
   local ctx = ngx.ctx
+  ctx.kong_phase = phases.SSL_CERTIFICATE
+
   runloop.certificate.before(ctx)
 
   for plugin, plugin_conf in plugins_iterator(loaded_plugins, true) do
@@ -407,6 +413,8 @@ end
 
 function Kong.rewrite()
   local ctx = ngx.ctx
+  ctx.kong_phase = phases.REWRITE
+
   runloop.rewrite.before(ctx)
 
   -- we're just using the iterator, as in this rewrite phase no consumer nor
@@ -426,6 +434,7 @@ end
 
 function Kong.access()
   local ctx = ngx.ctx
+  ctx.kong_phase = phases.ACCESS
 
   runloop.access.before(ctx)
 
@@ -458,6 +467,7 @@ end
 
 function Kong.header_filter()
   local ctx = ngx.ctx
+  ctx.kong_phase = phases.HEADER_FILTER
 
   runloop.header_filter.before(ctx)
 
@@ -474,6 +484,9 @@ function Kong.header_filter()
 end
 
 function Kong.body_filter()
+  local ctx = ngx.ctx
+  ctx.kong_phase = phases.BODY_FILTER
+
   for plugin, plugin_conf in plugins_iterator(loaded_plugins) do
     kong_global.set_named_ctx(kong, "plugin", plugin_conf)
     kong_global.set_namespaced_log(kong, plugin.handler._name)
@@ -483,10 +496,13 @@ function Kong.body_filter()
     kong_global.reset_log(kong)
   end
 
-  runloop.body_filter.after(ngx.ctx)
+  runloop.body_filter.after(ctx)
 end
 
 function Kong.log()
+  local ctx = ngx.ctx
+  ctx.kong_phase = phases.LOG
+
   for plugin, plugin_conf in plugins_iterator(loaded_plugins) do
     kong_global.set_named_ctx(kong, "plugin", plugin_conf)
     kong_global.set_namespaced_log(kong, plugin.handler._name)
@@ -496,7 +512,7 @@ function Kong.log()
     kong_global.reset_log(kong)
   end
 
-  runloop.log.after(ngx.ctx)
+  runloop.log.after(ctx)
 end
 
 function Kong.handle_error()

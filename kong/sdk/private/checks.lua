@@ -1,13 +1,64 @@
+local bit = require("bit")
+
+
 local checks = {}
 
 
 local tostring = tostring
 local ipairs = ipairs
+local lshift = bit.lshift
 local pairs = pairs
 local error = error
+local tobit = bit.tobit
+local band = bit.band
 local type = type
 local fmt = string.format
+local ngx = ngx
 
+
+checks.phases = {
+  INIT_WORKER      = tobit(0x00000001),
+  SSL_CERTIFICATE  = tobit(0x00000002),
+  REWRITE          = tobit(0x00000004),
+  ACCESS           = tobit(0x00000008),
+  HEADER_FILTER    = tobit(0x00000010),
+  BODY_FILTER      = tobit(0x00000020),
+  LOG              = tobit(0x00000040),
+  ALL_PHASES       = tobit(0xffffffff),
+}
+
+
+for k,v in pairs(checks.phases) do
+  checks.phases[v] = k
+end
+
+
+local function accepted_phases(accepted)
+  local names = {}
+  local n = 1
+  for _ = 1, 32 do
+    if band(accepted, n) ~= 0 then
+      table.insert(names, checks.phases[n]:lower())
+    end
+    n = lshift(n, 1)
+  end
+  if #accepted == 1 then
+    return fmt("the %s phase", accepted[1])
+  else
+    return "the following phases: " .. table.concat(accepted, ", ")
+  end
+end
+
+
+function checks.check_phase(accepted)
+  local phase = ngx.ctx.kong_phase
+  if band(phase, accepted) ~= 0 then
+    return true
+  end
+
+  error(fmt("function cannot be called in %s phase, only in %s",
+            checks.phases[phase]:lower(), accepted_phases(accepted), 3))
+end
 
 
 function checks.normalize_multi_header(value)

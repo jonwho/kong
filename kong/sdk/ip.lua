@@ -1,4 +1,9 @@
 local ip = require "resty.mediador.ip"
+local checks = require("kong.sdk.private.checks")
+
+
+local check_phase = checks.check_phase
+local ALL_PHASES = checks.phases.ALL_PHASES
 
 
 local function new(self)
@@ -30,16 +35,29 @@ local function new(self)
   end
 
   if #trusted_ips == 0 then
-    function _IP.is_trusted() return false end
+    function _IP.is_trusted()
+      check_phase(ALL_PHASES)
+
+      return false
+    end
 
   elseif trust_all_ipv4 and trust_all_ipv6 then
-    function _IP.is_trusted() return true end
+    function _IP.is_trusted()
+      check_phase(ALL_PHASES)
+
+      return true
+    end
 
   else
     -- do not load if not needed
     local px = require "resty.mediador.proxy"
+    local is_trusted = px.compile(trusted_ips)
 
-    _IP.is_trusted = px.compile(trusted_ips)
+    function _IP.is_trusted()
+      check_phase(ALL_PHASES)
+
+      return is_trusted()
+    end
   end
 
   return _IP

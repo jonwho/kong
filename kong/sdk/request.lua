@@ -1,5 +1,6 @@
 local cjson = require "cjson.safe"
 local multipart = require "multipart"
+local checks = require "kong.sdk.private.checks"
 
 
 local ngx = ngx
@@ -9,6 +10,8 @@ local lower = string.lower
 local type = type
 local error = error
 local tonumber = tonumber
+local check_phase = checks.check_phase
+local ALL_PHASES = checks.phases.ALL_PHASES
 
 
 local function new(self)
@@ -40,21 +43,29 @@ local function new(self)
 
 
   function _REQUEST.get_scheme()
+    check_phase(ALL_PHASES)
+
     return ngx.var.scheme
   end
 
 
   function _REQUEST.get_host()
+    check_phase(ALL_PHASES)
+
     return ngx.var.host
   end
 
 
   function _REQUEST.get_port()
+    check_phase(ALL_PHASES)
+
     return tonumber(ngx.var.server_port)
   end
 
 
   function _REQUEST.get_forwarded_scheme()
+    check_phase(ALL_PHASES)
+
     if self.ip.is_trusted(self.client.get_ip()) then
       local scheme = _REQUEST.get_header(X_FORWARDED_PROTO)
       if scheme then
@@ -67,6 +78,8 @@ local function new(self)
 
 
   function _REQUEST.get_forwarded_host()
+    check_phase(ALL_PHASES)
+
     if self.ip.is_trusted(self.client.get_ip()) then
       local host = _REQUEST.get_header(X_FORWARDED_HOST)
       if host then
@@ -85,6 +98,8 @@ local function new(self)
 
 
   function _REQUEST.get_forwarded_port()
+    check_phase(ALL_PHASES)
+
     if self.ip.is_trusted(self.client.get_ip()) then
       local port = tonumber(_REQUEST.get_header(X_FORWARDED_PORT))
       if port and port >= MIN_PORT and port <= MAX_PORT then
@@ -114,16 +129,22 @@ local function new(self)
 
 
   function _REQUEST.get_http_version()
+    check_phase(ALL_PHASES)
+
     return ngx.req.http_version()
   end
 
 
   function _REQUEST.get_method()
+    check_phase(ALL_PHASES)
+
     return ngx.req.get_method()
   end
 
 
   function _REQUEST.get_path()
+    check_phase(ALL_PHASES)
+
     local uri = ngx.var.request_uri
     local s = find(uri, "?", 2, true)
     return s and sub(uri, 1, s - 1) or uri
@@ -131,11 +152,15 @@ local function new(self)
 
 
   function _REQUEST.get_raw_query()
+    check_phase(ALL_PHASES)
+
     return ngx.var.args or ""
   end
 
 
   function _REQUEST.get_query_arg(name)
+    check_phase(ALL_PHASES)
+
     if type(name) ~= "string" then
       error("query argument name must be a string", 2)
     end
@@ -150,6 +175,8 @@ local function new(self)
 
 
   function _REQUEST.get_query(max_args)
+    check_phase(ALL_PHASES)
+
     if max_args == nil then
       return ngx.req.get_uri_args(MAX_QUERY_ARGS_DEFAULT)
     end
@@ -171,6 +198,8 @@ local function new(self)
 
 
   function _REQUEST.get_header(name)
+    check_phase(ALL_PHASES)
+
     if type(name) ~= "string" then
       error("header name must be a string", 2)
     end
@@ -185,6 +214,8 @@ local function new(self)
 
 
   function _REQUEST.get_headers(max_headers)
+    check_phase(ALL_PHASES)
+
     if max_headers == nil then
       return ngx.req.get_headers(MAX_HEADERS_DEFAULT)
     end
@@ -204,6 +235,8 @@ local function new(self)
 
 
   function _REQUEST.get_raw_body()
+    check_phase(ALL_PHASES)
+
     ngx.req.read_body()
 
     local body = ngx.req.get_body_data()
@@ -221,6 +254,8 @@ local function new(self)
 
 
   function _REQUEST.get_body(mimetype, max_args)
+    check_phase(ALL_PHASES)
+
     local content_type = mimetype or _REQUEST.get_header(CONTENT_TYPE)
     if not content_type then
       return nil, "missing content type"

@@ -14,6 +14,8 @@ local normalize_header = checks.normalize_header
 local normalize_multi_header = checks.normalize_multi_header
 local validate_header = checks.validate_header
 local validate_headers = checks.validate_headers
+local check_phase = checks.check_phase
+local ALL_PHASES = checks.phases.ALL_PHASES
 
 
 local function new(sdk, major_version)
@@ -35,11 +37,15 @@ local function new(sdk, major_version)
 
 
   function _RESPONSE.get_status()
+    check_phase(ALL_PHASES)
+
     return ngx.status
   end
 
 
   function _RESPONSE.get_header(name)
+    check_phase(ALL_PHASES)
+
     if type(name) ~= "string" then
       error("header name must be a string", 2)
     end
@@ -54,6 +60,8 @@ local function new(sdk, major_version)
 
 
   function _RESPONSE.get_headers(max_headers)
+    check_phase(ALL_PHASES)
+
     if max_headers == nil then
       return ngx.resp.get_headers(MAX_HEADERS_DEFAULT)
     end
@@ -73,6 +81,8 @@ local function new(sdk, major_version)
 
 
   function _RESPONSE.set_status(status)
+    check_phase(ALL_PHASES)
+
     if ngx.headers_sent then
       error("headers have already been sent", 2)
     end
@@ -93,6 +103,8 @@ local function new(sdk, major_version)
 
 
   function _RESPONSE.set_header(name, value)
+    check_phase(ALL_PHASES)
+
     if ngx.headers_sent then
       error("headers have already been sent", 2)
     end
@@ -104,6 +116,8 @@ local function new(sdk, major_version)
 
 
   function _RESPONSE.add_header(name, value)
+    check_phase(ALL_PHASES)
+
     if ngx.headers_sent then
       error("headers have already been sent", 2)
     end
@@ -122,6 +136,8 @@ local function new(sdk, major_version)
 
 
   function _RESPONSE.clear_header(name)
+    check_phase(ALL_PHASES)
+
     if ngx.headers_sent then
       error("headers have already been sent", 2)
     end
@@ -135,6 +151,8 @@ local function new(sdk, major_version)
 
 
   function _RESPONSE.set_headers(headers)
+    check_phase(ALL_PHASES)
+
     if ngx.headers_sent then
       error("headers have already been sent", 2)
     end
@@ -205,6 +223,8 @@ local function new(sdk, major_version)
 
 
   function _RESPONSE.exit(status, body, headers)
+    check_phase(ALL_PHASES)
+
     if ngx.headers_sent then
       error("headers have already been sent", 2)
     end

@@ -1,7 +1,10 @@
 local balancer = require("kong.runloop.balancer")
+local checks = require("kong.sdk.private.checks")
 
 
 local ngx = ngx
+local check_phase = checks.check_phase
+local ALL_PHASES = checks.phases.ALL_PHASES
 
 
 local function new()
@@ -18,6 +21,8 @@ local function new()
   -- @return `true` on success, `nil` and an error message if the
   -- upstream name is invalid; throws an error on malformed inputs.
   function service.set_upstream(host)
+    check_phase(ALL_PHASES)
+
     if type(host) ~= "string" then
       error("host must be a string", 2)
     end
@@ -41,6 +46,8 @@ local function new()
   -- @param port A port number between 0 and 65535.
   -- @return Nothing; throws an error on malformed inputs.
   function service.set_target(host, port)
+    check_phase(ALL_PHASES)
+
     if type(host) ~= "string" then
       error("host must be a string", 2)
     end
@@ -63,6 +70,8 @@ local function new()
   --
   -- @return true if the request was proxied by Kong;
   function service.was_proxied()
+    check_phase(ALL_PHASES)
+
     return ngx.ctx.KONG_PROXIED == true
   end
 
