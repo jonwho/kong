@@ -53,10 +53,10 @@ local function new(self)
     local px = require "resty.mediador.proxy"
     local is_trusted = px.compile(trusted_ips)
 
-    function _IP.is_trusted()
+    function _IP.is_trusted(addr)
       check_phase(ALL_PHASES)
 
-      return is_trusted()
+      return is_trusted(addr)
     end
   end
 

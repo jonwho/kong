@@ -37,15 +37,15 @@ local function accepted_phases(accepted)
   local names = {}
   local n = 1
   for _ = 1, 32 do
-    if band(accepted, n) ~= 0 then
+    if band(accepted, n) ~= 0 and checks.phases[n] then
       table.insert(names, checks.phases[n]:lower())
     end
     n = lshift(n, 1)
   end
-  if #accepted == 1 then
-    return fmt("the %s phase", accepted[1])
+  if #names == 1 then
+    return fmt("the %s phase", names[1])
   else
-    return "the following phases: " .. table.concat(accepted, ", ")
+    return "the following phases: " .. table.concat(names, ", ")
   end
 end
 
