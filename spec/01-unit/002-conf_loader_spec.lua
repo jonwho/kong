@@ -191,10 +191,10 @@ describe("Configuration loader", function()
       }))
 
       assert.equal("custom_cache 5m",
-                   conf.nginx_http_directives["lua_shared_dict"])
+                   conf.nginx_http_directives["lua_shared_dict"][1])
 
       assert.equal("8 24k",
-                   conf.nginx_http_directives["large_client_header_buffers"])
+                   conf.nginx_http_directives["large_client_header_buffers"][1])
     end)
 
     it("quotes numeric flexible prefix based configs", function()
@@ -203,7 +203,7 @@ describe("Configuration loader", function()
       })
       assert.is_nil(err)
 
-      assert.equal([["4096"]], conf.nginx_http_directives["max_pending_timers"])
+      assert.equal([["4096"]], conf.nginx_http_directives["max_pending_timers"][1])
     end)
 
     it("accepts flexible config values with precedence", function()
@@ -214,10 +214,10 @@ describe("Configuration loader", function()
       }))
 
       assert.equal("custom_cache 2m",
-                   conf.nginx_http_directives["lua_shared_dict"])
+                   conf.nginx_http_directives["lua_shared_dict"][1])
 
       assert.equal("4 16k",
-                   conf.nginx_http_directives["large_client_header_buffers"])
+                   conf.nginx_http_directives["large_client_header_buffers"][1])
     end)
   end)
 
@@ -225,7 +225,7 @@ describe("Configuration loader", function()
     it("is injected if not provided via nginx_http_* directives", function()
       local conf = assert(conf_loader())
       assert.equal("prometheus_metrics 5m",
-                   conf.nginx_http_directives["lua_shared_dict"])
+                   conf.nginx_http_directives["lua_shared_dict"][1])
     end)
     it("size is not modified if provided via nginx_http_* directives", function()
       local conf = assert(conf_loader(nil, {
@@ -233,15 +233,17 @@ describe("Configuration loader", function()
         nginx_http_lua_shared_dict = "prometheus_metrics 2m",
       }))
       assert.equal("prometheus_metrics 2m",
-                   conf.nginx_http_directives["lua_shared_dict"])
+                   conf.nginx_http_directives["lua_shared_dict"][1])
     end)
     it("is injected in addition to any shm provided via nginx_http_* directive", function()
       local conf = assert(conf_loader(nil, {
         plugins = "bundled",
         nginx_http_lua_shared_dict = "custom_cache 2m",
       }))
-      assert.equal("custom_cache 2m; lua_shared_dict prometheus_metrics 5m",
-                   conf.nginx_http_directives["lua_shared_dict"])
+      assert.equal("custom_cache 2m",
+                   conf.nginx_http_directives["lua_shared_dict"][1])
+      assert.equal("prometheus_metrics 5m",
+                   conf.nginx_http_directives["lua_shared_dict"][2])
     end)
     it("is not injected if prometheus plugin is disabled", function()
       local conf = assert(conf_loader(nil, {

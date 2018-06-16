@@ -468,11 +468,12 @@ local function parse_nginx_directives(dyn_key_prefix, conf)
           v = string.format("%q", v)
         end
 
-        directives[directive] = v
+        local t = directives[directive] or {}
+        table.insert(t, v)
+        directives[directive] = t
       end
     end
   end
-
   return directives
 end
 
@@ -660,19 +661,14 @@ local function load(path, custom_conf)
   -- temporary workaround: inject an shm for prometheus plugin if needed
   -- TODO: allow plugins to declare shm dependencies that are automatically
   -- injected
-  if conf.loaded_plugins["prometheus"] then local shm_value =
-    conf["nginx_http_directives"]["lua_shared_dict"]
+  if conf.loaded_plugins["prometheus"] then local shm_values =
+    conf["nginx_http_directives"]["lua_shared_dict"] or {}
 
-    if shm_value then
-      if not string.match(shm_value, "prometheus_metrics") then
-        shm_value = shm_value .. "; lua_shared_dict prometheus_metrics 5m"
-      end
-
-    else
-      shm_value = "prometheus_metrics 5m"
+    if not string.match(table.concat(shm_values), "prometheus_metrics") then
+      table.insert(shm_values, "prometheus_metrics 5m")
     end
 
-    conf["nginx_http_directives"]["lua_shared_dict"] = shm_value
+    conf["nginx_http_directives"]["lua_shared_dict"] = shm_values
   end
 
   -- nginx user directive
